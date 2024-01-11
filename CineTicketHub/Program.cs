@@ -1,7 +1,17 @@
+using System.Configuration;
+using CineTicketHub.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 35));
+
+builder.Services.AddDbContext<CineTicketHubContext>(options => 
+    options.UseMySql(connectionString, serverVersion));
 
 var app = builder.Build();
 
