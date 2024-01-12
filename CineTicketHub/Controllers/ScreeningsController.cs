@@ -60,15 +60,28 @@ namespace CineTicketHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MovieId,RoomId,StartsAt")] Screening screening)
         {
-            if (ModelState.IsValid)
+            // Ignore the movie and room properties
+            ModelState.Remove(nameof(Screening.Movie));
+            ModelState.Remove(nameof(Screening.Room));
+            
+            // Check if the movie id exists
+            if (!MovieExists(screening.MovieId))
+                ModelState.AddModelError(nameof(Screening.MovieId), $"Movie with ID {screening.MovieId} does not exist.");
+            
+            // Check if the room id exists
+            if (!RoomExists(screening.RoomId))
+                ModelState.AddModelError(nameof(Screening.RoomId), $"Room with ID {screening.RoomId} does not exist.");
+            
+            if (!ModelState.IsValid)
             {
-                _context.Add(screening);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", screening.MovieId);
+                ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", screening.RoomId);
+                return View(screening);
             }
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", screening.MovieId);
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", screening.RoomId);
-            return View(screening);
+            
+            _context.Add(screening);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Screenings/Edit/5
@@ -161,6 +174,16 @@ namespace CineTicketHub.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private bool MovieExists(int id)
+        {
+            return _context.Movies.Any(m => m.Id == id);
+        }
+
+        private bool RoomExists(int id)
+        {
+            return _context.Rooms.Any(r => r.Id == id);
+        }
+        
         private bool ScreeningExists(int id)
         {
             return _context.Screenings.Any(e => e.Id == id);
