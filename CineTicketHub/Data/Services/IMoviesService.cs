@@ -5,5 +5,6 @@ namespace CineTicketHub.Models.Services;
 
 public interface IMoviesService : IEntityBaseRepository<Movie>
 {
-    Task AddMovieVMAsync(MovieVM movieVM);
+    Task AddMovieAsync(MovieVM movieVM);
+    Task UpdateMovieAsync(MovieVM movieVM);
 }
