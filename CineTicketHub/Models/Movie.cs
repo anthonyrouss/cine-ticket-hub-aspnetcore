@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using CineTicketHub.Models.Base;
 
 namespace CineTicketHub.Models;
 
-public partial class Movie
+public partial class Movie : IEntityBase
 {
     public int Id { get; set; }
 
@@ -17,6 +18,8 @@ public partial class Movie
 
     public string? PosterUrl { get; set; }
 
+    // Relationships
+    
     public virtual ICollection<Screening> Screenings { get; set; } = new List<Screening>();
 
     public virtual ICollection<Genre> Genres { get; set; } = new List<Genre>();
