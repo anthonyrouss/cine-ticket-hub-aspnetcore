@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CineTicketHub.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 

@@ -1,6 +1,8 @@
-using CineTicketHub.Models.Base;
+using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
+using CineTicketHub.Services.Base;
 
-namespace CineTicketHub.Models.Services;
+namespace CineTicketHub.Services;
 
 public class GenresService : EntityBaseRepository<Genre>, IGenresService
 {

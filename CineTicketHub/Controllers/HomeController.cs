@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
 
 namespace CineTicketHub.Controllers;
 

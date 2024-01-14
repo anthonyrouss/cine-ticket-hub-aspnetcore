@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CineTicketHub.Data.ViewModels;
+namespace CineTicketHub.Models.ViewModels;
 
 public class MovieVM
 {

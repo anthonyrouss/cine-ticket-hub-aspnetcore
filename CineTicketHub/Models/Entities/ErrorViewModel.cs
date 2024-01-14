@@ -1,4 +1,4 @@
-namespace CineTicketHub.Models;
+namespace CineTicketHub.Models.Entities;
 
 public class ErrorViewModel
 {

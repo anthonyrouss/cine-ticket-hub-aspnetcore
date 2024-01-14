@@ -1,5 +1,6 @@
-using CineTicketHub.Data.ViewModels;
 using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
+using CineTicketHub.Models.ViewModels;
 
 namespace CineTicketHub.Mappers;
 

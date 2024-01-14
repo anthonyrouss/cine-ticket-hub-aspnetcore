@@ -1,7 +1,7 @@
 using System.Configuration;
 using CineTicketHub.Mappers;
 using CineTicketHub.Models;
-using CineTicketHub.Models.Services;
+using CineTicketHub.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using CineTicketHub.Models.Base;
+﻿using CineTicketHub.Services.Base;
 
-namespace CineTicketHub.Models;
+namespace CineTicketHub.Models.Entities;
 
 public partial class Genre : IEntityBase
 {

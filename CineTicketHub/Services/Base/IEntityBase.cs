@@ -1,4 +1,4 @@
-namespace CineTicketHub.Models.Base;
+namespace CineTicketHub.Services.Base;
 
 public interface IEntityBase
 {

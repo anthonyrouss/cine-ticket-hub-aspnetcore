@@ -1,10 +1,11 @@
-using CineTicketHub.Data.ViewModels;
-using CineTicketHub.Models.Base;
+using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
+using CineTicketHub.Models.ViewModels;
+using CineTicketHub.Services.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NuGet.Packaging;
 
-namespace CineTicketHub.Models.Services;
+namespace CineTicketHub.Services;
 
 public class MoviesService : EntityBaseRepository<Movie>, IMoviesService
 {

@@ -1,7 +1,7 @@
+using CineTicketHub.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace CineTicketHub.Models.Base;
+namespace CineTicketHub.Services.Base;
 
 public class EntityBaseRepository<E> : IEntityBaseRepository<E> where E: class, IEntityBase, new()
 {
