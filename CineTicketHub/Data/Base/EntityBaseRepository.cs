@@ -31,15 +31,24 @@ public class EntityBaseRepository<E> : IEntityBaseRepository<E> where E: class, 
 
     public async Task UpdateAsync(int id, E entity)
     {
-        EntityEntry entityEntry = _context.Entry<E>(entity);
-        entityEntry.State = EntityState.Modified;
+        var existingEntity = await _context.Set<E>().FindAsync(id);
+
+        if (existingEntity == null) return;
+
+        _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<E> DeleteAsync(int id)
     {
         var entity = await _context.Set<E>().FirstOrDefaultAsync(e => e.Id == id);
-        EntityEntry entityEntry = _context.Entry<E>(entity);
-        entityEntry.State = EntityState.Deleted;
+
+        if (entity != null)
+        {
+            _context.Set<E>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        
         return entity;
     }
 }
