@@ -17,6 +17,7 @@ builder.Services.AddDbContext<CineTicketHubContext>(options =>
 // Services config
 
 builder.Services.AddScoped<IMoviesService, MoviesService>();
+builder.Services.AddScoped<IGenresService, GenresService>();
 
 var app = builder.Build();
 
