@@ -1,5 +1,7 @@
 using System.Configuration;
+using CineTicketHub.Mappers;
 using CineTicketHub.Models;
+using CineTicketHub.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,12 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 35));
 
 builder.Services.AddDbContext<CineTicketHubContext>(options => 
     options.UseMySql(connectionString, serverVersion));
+
+// Services config
+
+builder.Services.AddScoped<IMoviesService, MoviesService>();
+builder.Services.AddScoped<IGenresService, GenresService>();
+builder.Services.AddScoped<MovieMapper>();
 
 var app = builder.Build();
 

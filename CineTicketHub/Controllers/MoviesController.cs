@@ -1,27 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CineTicketHub.Models;
+using CineTicketHub.Mappers;
+using CineTicketHub.Models.ViewModels;
+using CineTicketHub.Services;
 
 namespace CineTicketHub.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly CineTicketHubContext _context;
+        private readonly IMoviesService _service;   
+        private readonly IGenresService _genresService;
+        private readonly MovieMapper _movieMapper;
 
-        public MoviesController(CineTicketHubContext context)
+        public MoviesController(IMoviesService service, IGenresService genresService, MovieMapper movieMapper)
         {
-            _context = context;
+            _service = service;
+            _genresService = genresService;
+            _movieMapper = movieMapper;
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _service.GetAllAsync());
         }
 
         // GET: Movies/Details/5
@@ -32,8 +33,8 @@ namespace CineTicketHub.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _service.GetByIdAsync(id.Value);
+            
             if (movie == null)
             {
                 return NotFound();
@@ -45,6 +46,7 @@ namespace CineTicketHub.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            ViewData["GenreIds"] = new SelectList(_genresService.GetAllAsync().Result, "Id", "Name");
             return View();
         }
 
@@ -53,15 +55,11 @@ namespace CineTicketHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Duration,ReleaseDate,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Create(MovieVM movieVM)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(movie);
+            if (!ModelState.IsValid) return View(movieVM);
+            await _service.AddMovieAsync(movieVM);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Movies/Edit/5
@@ -72,12 +70,15 @@ namespace CineTicketHub.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _service.GetByIdAsync(id.Value);
+            
             if (movie == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            
+            ViewData["GenreIds"] = new SelectList(_genresService.GetAllAsync().Result, "Id", "Name");
+            return View(_movieMapper.MapToMovieVM(movie));
         }
 
         // POST: Movies/Edit/5
@@ -85,34 +86,17 @@ namespace CineTicketHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Duration,ReleaseDate,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, MovieVM movieVM)
         {
-            if (id != movie.Id)
+            if (id != movieVM.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(movie);
+            if (!ModelState.IsValid) return View(movieVM);
+            
+            await _service.UpdateMovieAsync(movieVM);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Movies/Delete/5
@@ -123,8 +107,8 @@ namespace CineTicketHub.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = _service.GetByIdAsync(id.Value).Result;
+            
             if (movie == null)
             {
                 return NotFound();
@@ -138,19 +122,9 @@ namespace CineTicketHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-            }
-
-            await _context.SaveChangesAsync();
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
-        }
+        
     }
 }

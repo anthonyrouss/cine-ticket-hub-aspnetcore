@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
 
 namespace CineTicketHub.Controllers
 {

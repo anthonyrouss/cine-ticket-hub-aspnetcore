@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CineTicketHub.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
@@ -72,11 +73,11 @@ public partial class CineTicketHubContext : DbContext
                     "MovieHasGenre",
                     r => r.HasOne<Genre>().WithMany()
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("movie_has_genre_ibfk_2"),
                     l => l.HasOne<Movie>().WithMany()
                         .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("movie_has_genre_ibfk_1"),
                     j =>
                     {

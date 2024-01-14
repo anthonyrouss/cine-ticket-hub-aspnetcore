@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CineTicketHub.Models;
+﻿namespace CineTicketHub.Models.Entities;
 
 public partial class Room
 {
