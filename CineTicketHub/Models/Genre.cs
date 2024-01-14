@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using CineTicketHub.Models.Base;
 
 namespace CineTicketHub.Models;
 
-public partial class Genre
+public partial class Genre : IEntityBase
 {
     public int Id { get; set; }
 
