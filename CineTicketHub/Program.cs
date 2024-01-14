@@ -1,4 +1,5 @@
 using System.Configuration;
+using CineTicketHub.Mappers;
 using CineTicketHub.Models;
 using CineTicketHub.Models.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<CineTicketHubContext>(options =>
 
 builder.Services.AddScoped<IMoviesService, MoviesService>();
 builder.Services.AddScoped<IGenresService, GenresService>();
+builder.Services.AddScoped<MovieMapper>();
 
 var app = builder.Build();
 
