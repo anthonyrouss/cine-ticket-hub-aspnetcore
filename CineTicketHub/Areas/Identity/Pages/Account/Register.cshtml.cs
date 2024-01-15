@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using CineTicketHub.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +29,6 @@ namespace CineTicketHub.Areas.Identity.Pages.Account
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        //private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,7 +41,6 @@ namespace CineTicketHub.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            //_emailSender = emailSender;
         }
 
         /// <summary>
@@ -119,8 +118,8 @@ namespace CineTicketHub.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // Assign "customer" role to the user
-                    await _userManager.AddToRoleAsync(user, "customer");
+                    // Assign customer role to the user
+                    await _userManager.AddToRoleAsync(user, UserRole.CUSTOMER.ToString());
                     
                     _logger.LogInformation("User created a new account with password.");
 
