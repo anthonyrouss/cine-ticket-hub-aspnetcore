@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using CineTicketHub.Models.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace CineTicketHub.Models;
 
-public partial class CineTicketHubContext : DbContext
+public partial class CineTicketHubContext : IdentityDbContext
 {
     public CineTicketHubContext()
     {
@@ -26,13 +28,10 @@ public partial class CineTicketHubContext : DbContext
     public virtual DbSet<Room> Rooms { get; set; }
 
     public virtual DbSet<Screening> Screenings { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=cine_ticket_hub;user=springstudent;password=springstudent;port=3306", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.35-mysql"));
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
