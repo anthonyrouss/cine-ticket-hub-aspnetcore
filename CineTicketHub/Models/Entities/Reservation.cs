@@ -1,4 +1,6 @@
-﻿namespace CineTicketHub.Models.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace CineTicketHub.Models.Entities;
 
 public partial class Reservation
 {
@@ -6,7 +8,7 @@ public partial class Reservation
 
     public int ScreeningId { get; set; }
 
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     public int NumOfSeats { get; set; }
 
