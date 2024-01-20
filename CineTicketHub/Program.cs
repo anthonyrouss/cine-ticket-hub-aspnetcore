@@ -2,6 +2,7 @@ using System.Configuration;
 using CineTicketHub.Enums;
 using CineTicketHub.Mappers;
 using CineTicketHub.Models;
+using CineTicketHub.Models.Entities;
 using CineTicketHub.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ builder.Services.AddDbContext<CineTicketHubContext>(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => 
         options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<CineTicketHubContext>()
     .AddDefaultTokenProviders();
@@ -77,7 +78,7 @@ using (var scope = app.Services.CreateScope())
 
 using (var scope = app.Services.CreateScope())
 {
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     // Dev: Create admin account if not exists
     string adminEmail = "admin@dev.com";
@@ -85,7 +86,7 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(adminEmail) == null)
     {
-        var adminUser = new IdentityUser
+        var adminUser = new ApplicationUser
         {
             UserName = adminEmail,
             Email = adminEmail
@@ -102,7 +103,7 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(contentManagerEmail) == null)
     {
-        var contentManagerUser = new IdentityUser
+        var contentManagerUser = new ApplicationUser
         {
             UserName = contentManagerEmail,
             Email = contentManagerEmail

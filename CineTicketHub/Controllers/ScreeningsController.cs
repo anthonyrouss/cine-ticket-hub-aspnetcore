@@ -13,10 +13,14 @@ namespace CineTicketHub.Controllers
     public class ScreeningsController : Controller
     {
         private readonly CineTicketHubContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public ScreeningsController(CineTicketHubContext context)
+        public ScreeningsController(CineTicketHubContext context, 
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Screenings

@@ -10,5 +10,7 @@ public partial class Reservation
 
     public int NumOfSeats { get; set; }
 
+    public virtual ApplicationUser User { get; set; } = null!;
+
     public virtual Screening Screening { get; set; } = null!;
 }
