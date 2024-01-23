@@ -47,30 +47,35 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PosterUrl)
         </dd>
-        <dt class="col-sm-12">
-            Screenings
-        </dt>
+    </dl>
+        <h4>Screenings</h4>
+        <hr />
+    <dl class="row">
         <dd class="col-sm-6">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped align-middle">
             <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayName("StartsAt")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Room")
-                    </th>
-                </tr>
+            <tr>
+                <th>
+                    @Html.DisplayName("Room")
+                </th>
+                <th>
+                    @Html.DisplayName("Starts at")
+                </th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
                 @foreach (var item in (IEnumerable<CineTicketHub.Models.Entities.Screening>)ViewBag.screenings)
                 {
                     <tr>
                         <td>
+                            @Html.DisplayFor(modelItem => item.Room.Name)
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.StartsAt)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Room.Id)
+                            <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@item.Id" type="button" class="btn btn-primary">Book Your Seat</a>
                         </td>
                     </tr>
                 }
