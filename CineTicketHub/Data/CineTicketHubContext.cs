@@ -107,6 +107,11 @@ public partial class CineTicketHubContext : IdentityDbContext
                 .HasForeignKey(d => d.ScreeningId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("reservations_ibfk_1");
+
+            entity.HasOne(d => d.User)
+                .WithMany(u => u.Reservations)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<Room>(entity =>

@@ -3,6 +3,7 @@ using System;
 using CineTicketHub.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CineTicketHub.Migrations
 {
     [DbContext(typeof(CineTicketHubContext))]
-    partial class CineTicketHubContextModelSnapshot : ModelSnapshot
+    [Migration("20240120110632_ChangeUserIdDataType")]
+    partial class ChangeUserIdDataType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,13 +98,11 @@ namespace CineTicketHub.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("longtext")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("PRIMARY");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex(new[] { "ScreeningId" }, "screening_id");
 
@@ -221,11 +222,6 @@ namespace CineTicketHub.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("varchar(21)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -276,10 +272,6 @@ namespace CineTicketHub.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -380,13 +372,6 @@ namespace CineTicketHub.Migrations
                     b.ToTable("movie_has_genre", (string)null);
                 });
 
-            modelBuilder.Entity("CineTicketHub.Models.Entities.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
             modelBuilder.Entity("CineTicketHub.Models.Entities.Reservation", b =>
                 {
                     b.HasOne("CineTicketHub.Models.Entities.Screening", "Screening")
@@ -395,15 +380,7 @@ namespace CineTicketHub.Migrations
                         .IsRequired()
                         .HasConstraintName("reservations_ibfk_1");
 
-                    b.HasOne("CineTicketHub.Models.Entities.ApplicationUser", "User")
-                        .WithMany("Reservations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Screening");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CineTicketHub.Models.Entities.Screening", b =>
@@ -504,11 +481,6 @@ namespace CineTicketHub.Migrations
                 });
 
             modelBuilder.Entity("CineTicketHub.Models.Entities.Screening", b =>
-                {
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("CineTicketHub.Models.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Reservations");
                 });

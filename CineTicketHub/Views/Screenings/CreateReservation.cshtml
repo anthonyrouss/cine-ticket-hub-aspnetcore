@@ -1,0 +1,38 @@
+@model CineTicketHub.Models.Entities.Reservation
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Reservation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Screenings" asp-action="CreateReservation" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <p>Movie Title: @Model.Screening.Movie.Title</p>
+            <p>Room Name: @Model.Screening.Room.Name</p>
+            <div class="form-group">
+                <label asp-for="NumOfSeats" class="control-label"></label>
+                <input asp-for="NumOfSeats" class="form-control" />
+                <span asp-validation-for="NumOfSeats" class="text-danger"></span>
+            </div>
+            <br/>
+            <p>Seats left: @ViewBag.SeatsLeft</p>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
