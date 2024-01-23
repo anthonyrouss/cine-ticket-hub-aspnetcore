@@ -1,0 +1,15 @@
+@model CineTicketHub.Models.Entities.Reservation
+
+@{
+    ViewBag.Title = "Reservation Confirmation";
+}
+
+<h2>Reservation Confirmation</h2>
+
+<p>Thank you for your reservation:</p>
+<p>Movie: @Model.Screening.Movie.Title</p>
+<p>Room: @Model.Screening.Room.Name</p>
+<p>Date and Time: @Model.Screening.StartsAt</p>
+<p>Seats Reserved: @Model.NumOfSeats</p>
+
+<p><a href="@Url.Action("Index", "Home")">Back to Home</a></p>
