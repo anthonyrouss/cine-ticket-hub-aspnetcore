@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CineTicketHub.Mappers;
 using CineTicketHub.Models.ViewModels;
 using CineTicketHub.Services;
+using CineTicketHub.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineTicketHub.Controllers
 {
@@ -11,9 +13,11 @@ namespace CineTicketHub.Controllers
         private readonly IMoviesService _service;   
         private readonly IGenresService _genresService;
         private readonly MovieMapper _movieMapper;
+        private readonly CineTicketHubContext _context;
 
-        public MoviesController(IMoviesService service, IGenresService genresService, MovieMapper movieMapper)
+        public MoviesController(IMoviesService service, IGenresService genresService, MovieMapper movieMapper, CineTicketHubContext context)
         {
+            _context = context;
             _service = service;
             _genresService = genresService;
             _movieMapper = movieMapper;
@@ -39,7 +43,7 @@ namespace CineTicketHub.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.screenings = _context.Screenings.Include(s => s.Room).Where(s => s.MovieId == id.Value && s.StartsAt >= DateTime.Now).ToList();
             return View(movie);
         }
 
