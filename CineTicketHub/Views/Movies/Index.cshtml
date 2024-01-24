@@ -1,66 +1,46 @@
 @model IEnumerable<CineTicketHub.Models.Entities.Movie>
-
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var isAdmin = User.IsInRole("ADMIN");
+    var isContentManager = User.IsInRole("CONTENT_MANAGER");
 }
 
-<h1>Index</h1>
+<div class="container">
+    <h2 class="mt-4 mb-4">Movies</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genres)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PosterUrl)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @string.Join(", ", item.Genres.Select(g => g.Name))
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PosterUrl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    <div class="row">
+        
+        @foreach (var movie in Model)
+        {
+            <!-- Movie -->
+            <div class="col-md-2 mb-4">
+                <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="card-link text-decoration-none text-black">
+                    <div class="card d-flex flex-column">
+                        <img src="@movie.PosterUrl" class="card-img-top img-fluid" alt="@movie.Title Poster" style="width: 100%">
+                        <div class="card-body flex-grow-1">
+                            <h6 class="card-title">@movie.Title (@movie.ReleaseDate.Year)</h6>
+                            <div class="card-text">
+                                @foreach (var genre in movie.Genres)
+                                {
+                                    <span class="badge bg-secondary">@genre.Name</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@if (isAdmin || isContentManager)
+{
+    <div class="dropup position-absolute end-0 rounded-circle m-5" style="z-index: 1000; top: 4%">
+        <a asp-controller="Movies" asp-action="Create" class="btn btn-primary btn-lg hide-toggle" style="font-size: 1rem;">
+            Add Movie
+        </a>
+    </div>
 }
-    </tbody>
-</table>
+
+
