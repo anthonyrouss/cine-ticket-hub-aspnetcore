@@ -32,16 +32,23 @@
             </div>
             
             <div class="mt-4">
-                <h4>Screenings:</h4>
-                @foreach (var screening in Model.Screenings)
+                <h4>Screenings</h4>
+                @if (Model.Screenings != null && Model.Screenings.Count > 0)
                 {
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@screening.StartsAt.ToString("MMMM dd, HH:mm")</h5>
-                            <p class="card-text">Room: @screening.Room.Name</p>
-                            <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@screening.Id" class="btn btn-primary">Reserve Seats</a>
+                    @foreach (var screening in Model.Screenings)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">@screening.StartsAt.ToString("MMMM dd, HH:mm")</h5>
+                                <p class="card-text">Room: @screening.Room.Name</p>
+                                <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@screening.Id" class="btn btn-primary">Reserve Seats</a>
+                            </div>
                         </div>
-                    </div>
+                    }
+                }
+                else
+                {
+                    <p>No available screenings.</p>
                 }
             </div>
         </div>
