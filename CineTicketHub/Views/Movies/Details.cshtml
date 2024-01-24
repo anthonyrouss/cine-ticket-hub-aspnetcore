@@ -1,90 +1,57 @@
-@model CineTicketHub.Models.Entities.Movie
-
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isAdmin = User.IsInRole("ADMIN");
+    var isContentManager = User.IsInRole("CONTENT_MANAGER");
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="@Model.PosterUrl" class="img-fluid" alt="@Model.Title Poster" style="max-height: 80%">
+        </div>
+        <div class="col-md-6">
+            <h2>@Model.Title</h2>
+            <p class="lead">@Model.Description</p>
 
-<div>
-    <h4>Movie</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genres)
-        </dt>
-        <dd class = "col-sm-10">
-            @string.Join(", ", Model.Genres.Select(g => g.Name))
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PosterUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PosterUrl)
-        </dd>
-    </dl>
-        <h4>Screenings</h4>
-        <hr />
-    <dl class="row">
-        <dd class="col-sm-6">
-        <table class="table table-bordered table-striped align-middle">
-            <thead>
-            <tr>
-                <th>
-                    @Html.DisplayName("Room")
-                </th>
-                <th>
-                    @Html.DisplayName("Starts at")
-                </th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in (IEnumerable<CineTicketHub.Models.Entities.Screening>)ViewBag.screenings)
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Duration:</strong> @Model.Duration minutes
+                </div>
+                <div class="col-md-6">
+                    <strong>Release Date:</strong> @Model.ReleaseDate.ToString("MMMM dd, yyyy")
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <strong>Genres:</strong>
+                <div class="mt-2">
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <span class="badge bg-secondary mr-2">@genre.Name</span>
+                    }
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h4>Screenings:</h4>
+                @foreach (var screening in Model.Screenings)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Room.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartsAt)
-                        </td>
-                        <td>
-                            <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@item.Id" type="button" class="btn btn-primary">Book Your Seat</a>
-                        </td>
-                    </tr>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@screening.StartsAt.ToString("MMMM dd, HH:mm")</h5>
+                            <p class="card-text">Room: @screening.Room.Name</p>
+                            <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@screening.Id" class="btn btn-primary">Reserve Seats</a>
+                        </div>
+                    </div>
                 }
-            </tbody>
-        </table>
-        </dd>
-    </dl>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@if (isAdmin || isContentManager)
+{
+    <div class="dropup position-absolute end-0 rounded-circle m-5" style="z-index: 1000; top: 3%">
+        <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-controller="Movies" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    </div>
+}
