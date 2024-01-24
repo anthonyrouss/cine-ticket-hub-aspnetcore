@@ -95,6 +95,7 @@ using (var scope = app.Services.CreateScope())
         await userManager.CreateAsync(adminUser, adminPassword);
 
         await userManager.AddToRoleAsync(adminUser, UserRole.ADMIN.ToString());
+        await userManager.AddToRoleAsync(adminUser, UserRole.CONTENT_MANAGER.ToString());
     }
 
     // Dev: Create content manager account if not exists
