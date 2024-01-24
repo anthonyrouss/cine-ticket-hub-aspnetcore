@@ -1,5 +1,8 @@
+@model CineTicketHub.Models.Entities.Movie
+
 @{
-    var isAdmin = User.IsInRole("ADMIN");
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
     var isContentManager = User.IsInRole("CONTENT_MANAGER");
 }
 
@@ -41,7 +44,18 @@
                             <div class="card-body">
                                 <h5 class="card-title">@screening.StartsAt.ToString("MMMM dd, HH:mm")</h5>
                                 <p class="card-text">Room: @screening.Room.Name</p>
-                                <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@screening.Id" class="btn btn-primary">Reserve Seats</a>
+                                
+                                @if (isContentManager)
+                                {
+                                    <a asp-controller="Screenings" asp-action="Edit" asp-route-id="@screening.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-controller="Screenings" asp-action="Delete" asp-route-id="@screening.Id" class="btn btn-danger">Delete</a>
+                        
+                                }
+                                else
+                                {
+                                    <a asp-controller="Screenings" asp-action="CreateReservation" asp-route-screeningId="@screening.Id" class="btn btn-primary">Reserve Seats</a>
+                                }
+                                
                             </div>
                         </div>
                     }
@@ -55,7 +69,7 @@
     </div>
 </div>
 
-@if (isAdmin || isContentManager)
+@if (isContentManager)
 {
     <div class="dropup position-absolute end-0 rounded-circle m-5" style="z-index: 1000; top: 3%">
         <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
