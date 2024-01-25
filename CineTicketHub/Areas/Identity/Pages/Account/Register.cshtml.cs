@@ -117,11 +117,12 @@ namespace CineTicketHub.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+                // Assign customer role to the user
+                await _userManager.AddToRoleAsync(user, UserRole.CUSTOMER.ToString());
+
                 if (result.Succeeded)
                 {
-                    // Assign customer role to the user
-                    await _userManager.AddToRoleAsync(user, UserRole.CUSTOMER.ToString());
-                    
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
