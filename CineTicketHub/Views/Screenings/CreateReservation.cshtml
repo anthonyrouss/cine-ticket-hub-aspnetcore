@@ -5,33 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <div class="row">
+        <h2>Create a Reservation for: <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.Screening.MovieId">@Model.Screening.Movie.Title</a></h2>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <img src="@Model.Screening.Movie.PosterUrl" class="img-fluid" alt="@Model.Screening.Movie.Title Poster" style="max-height: 70%">
+                </div>
+            </div>
+        </div>
 
-<h4>Reservation</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Screenings" asp-action="CreateReservation" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <p>Movie Title: @Model.Screening.Movie.Title</p>
-            <p>Room Name: @Model.Screening.Room.Name</p>
-            <div class="form-group">
-                <label asp-for="NumOfSeats" class="control-label"></label>
-                <input asp-for="NumOfSeats" class="form-control" />
-                <span asp-validation-for="NumOfSeats" class="text-danger"></span>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Screening Details</h3>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Date and Time:</dt>
+                        <dd class="col-sm-8">@Model.Screening.StartsAt.ToString("dd/MM/yyyy, HH:mm")</dd>
+
+                        <dt class="col-sm-4">Room:</dt>
+                        <dd class="col-sm-8"><a asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Screening.RoomId">@Model.Screening.Room.Name</a></dd>
+
+                        <dt class="col-sm-4">Seats left:</dt>
+                        <dd class="col-sm-8">@ViewBag.SeatsLeft</dd>
+                    </dl>
+
+                    <form asp-controller="Screenings" asp-action="CreateReservation" method="post">
+                        <div class="form-group">
+                            <label asp-for="NumOfSeats" class="control-label">Number of Seats:</label>
+                            <input asp-for="NumOfSeats" class="form-control" placeholder="Enter number of seats"/>
+                            <span asp-validation-for="NumOfSeats" class="text-danger"></span>
+                        </div>
+
+                        <input type="submit" value="Reserve Seats" class="btn btn-primary mt-2" />
+                    </form>
+                </div>
             </div>
-            <br/>
-            <p>Seats left: @ViewBag.SeatsLeft</p>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
