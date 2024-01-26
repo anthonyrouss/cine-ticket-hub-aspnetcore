@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CineTicketHub.Models.Entities;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using CineTicketHub.Models;
 using CineTicketHub.Models.ViewModels;
 using CineTicketHub.Enums;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 
 namespace CineTicketHub.Controllers
 {
@@ -18,17 +11,13 @@ namespace CineTicketHub.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
-        private readonly CineTicketHubContext _context;
-        private readonly SignInManager<ApplicationUser> _signInManager; 
         private readonly ILogger<ApplicationUsersController> _logger;
 
         public ApplicationUsersController(UserManager<ApplicationUser> userManager,
-            CineTicketHubContext context, ILogger<ApplicationUsersController> logger,
-            IUserStore<ApplicationUser> userStore, SignInManager<ApplicationUser> signInManager)
+            ILogger<ApplicationUsersController> logger,
+            IUserStore<ApplicationUser> userStore)
         {   
-            _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _logger = logger;
