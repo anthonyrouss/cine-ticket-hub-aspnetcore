@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var isContentManager = User.IsInRole("CONTENT_MANAGER");
 }
 
 <div class="container">
@@ -33,13 +32,10 @@
     </div>
 </div>
 
-@if (isContentManager)
-{
-    <div class="dropup position-absolute end-0 rounded-circle m-5" style="z-index: 1000; top: 4%">
-        <a asp-controller="Movies" asp-action="Create" class="btn btn-primary btn-lg hide-toggle" style="font-size: 1rem;">
-            Add Movie
-        </a>
-    </div>
-}
+<div class="dropup position-absolute end-0 rounded-circle m-5" style="z-index: 1000; top: 4%">
+    <a asp-controller="Movies" asp-action="Create" class="btn btn-primary btn-lg hide-toggle" style="font-size: 1rem;">
+        Add Movie
+    </a>
+</div>
 
 

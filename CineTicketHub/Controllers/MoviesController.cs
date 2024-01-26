@@ -1,3 +1,4 @@
+using CineTicketHub.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CineTicketHub.Mappers;
@@ -26,7 +27,31 @@ namespace CineTicketHub.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            return View(await _service.GetAllAsync());
+            var isContentManager = User.IsInRole(UserRole.CONTENT_MANAGER.ToString());
+            
+            if (isContentManager)
+            {
+                return View("ContentManagerIndex", await _service.GetAllAsync());
+            }
+            
+            var currentDate = DateTime.Now;
+
+            var playingNow = _context.Movies
+                .Where(m => m.Screenings.Any(s => s.StartsAt >= currentDate))
+                .Include(m => m.Genres)
+                .ToList();
+
+            var upcomingMovies = _context.Movies
+                .Where(m => m.Screenings.Count == 0)
+                .Include(m => m.Genres)
+                .ToList();
+
+            // You can pass these lists to the view or use a ViewModel
+            ViewData["PlayingNow"] = playingNow;
+            ViewData["UpcomingMovies"] = upcomingMovies;
+
+            return View("CustomerIndex");
+            
         }
 
         // GET: Movies/Details/5
