@@ -84,6 +84,7 @@ namespace CineTicketHub.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).+$", ErrorMessage = "The password must contain at least one letter, one number, and one non-alphanumeric symbol.")]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
