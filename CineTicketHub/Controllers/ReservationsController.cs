@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CineTicketHub.Models;
 using CineTicketHub.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace CineTicketHub.Controllers
@@ -26,6 +27,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Reservations
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var isContentManager = User.IsInRole(UserRole.CONTENT_MANAGER.ToString());
@@ -149,6 +151,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Reservations/Delete/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,6 +172,7 @@ namespace CineTicketHub.Controllers
 
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
