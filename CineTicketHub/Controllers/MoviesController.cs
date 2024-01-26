@@ -5,6 +5,7 @@ using CineTicketHub.Mappers;
 using CineTicketHub.Models.ViewModels;
 using CineTicketHub.Services;
 using CineTicketHub.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace CineTicketHub.Controllers
@@ -73,6 +74,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Movies/Create
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public IActionResult Create()
         {
             ViewData["GenreIds"] = new SelectList(_genresService.GetAllAsync().Result, "Id", "Name");
@@ -83,6 +85,7 @@ namespace CineTicketHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MovieVM movieVM)
         {
@@ -92,6 +95,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Movies/Edit/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -114,6 +118,7 @@ namespace CineTicketHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, MovieVM movieVM)
         {
@@ -129,6 +134,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Movies/Delete/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,6 +154,7 @@ namespace CineTicketHub.Controllers
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

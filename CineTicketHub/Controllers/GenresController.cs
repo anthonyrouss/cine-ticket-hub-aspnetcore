@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CineTicketHub.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CineTicketHub.Models;
 using CineTicketHub.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CineTicketHub.Controllers
 {
+    [Authorize(Roles = "CONTENT_MANAGER")]
     public class GenresController : Controller
     {
         private readonly CineTicketHubContext _context;

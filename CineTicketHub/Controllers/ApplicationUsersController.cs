@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using CineTicketHub.Models.Entities;
 using CineTicketHub.Models.ViewModels;
 using CineTicketHub.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CineTicketHub.Controllers
 {
+    [Authorize(Roles = "ADMIN")]
     public class ApplicationUsersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

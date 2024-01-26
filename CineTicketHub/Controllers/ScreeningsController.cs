@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CineTicketHub.Controllers
 {
+    
     public class ScreeningsController : Controller
     {
         private readonly CineTicketHubContext _context;
@@ -26,6 +27,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Screenings
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Index()
         {
             var cineTicketHubContext = _context.Screenings.Include(s => s.Movie).Include(s => s.Room);
@@ -33,6 +35,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Screenings/Details/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,6 +56,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Screenings/Create
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public IActionResult Create()
         {
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title");
@@ -64,6 +68,7 @@ namespace CineTicketHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MovieId,RoomId,StartsAt")] Screening screening)
         {
@@ -92,6 +97,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Screenings/Edit/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,6 +119,7 @@ namespace CineTicketHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,MovieId,RoomId,StartsAt")] Screening screening)
         {
@@ -147,6 +154,7 @@ namespace CineTicketHub.Controllers
         }
 
         // GET: Screenings/Delete/5
+        [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -168,6 +176,7 @@ namespace CineTicketHub.Controllers
 
         // POST: Screenings/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "CONTENT_MANAGER")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
