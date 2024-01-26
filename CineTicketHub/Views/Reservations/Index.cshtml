@@ -3,46 +3,70 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var isContentManager = User.IsInRole("CONTENT_MANAGER");
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumOfSeats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Screening)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumOfSeats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Screening.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (isContentManager)
+{
+    <h1>All Reservations</h1>
 }
-    </tbody>
-</table>
+else
+{
+    <h1>My Reservations</h1>
+}
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped mt-4">
+        <thead class="thead-dark">
+        <tr>
+            @if (isContentManager)
+            {
+                <th scope="col">User Email</th>
+            }
+            <th scope="col">Movie</th>
+            <th scope="col">Room</th>
+            <th scope="col">Reserved Seats</th>
+            <th scope="col">Date and Time</th>
+            @if (isContentManager) { <th></th> }
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in Model)
+            {
+                <tr>
+                    @if (isContentManager)
+                    {
+                        <td>@reservation.User.Email</td> 
+                    }
+                    <td><a asp-controller="Movies" asp-action="Details" asp-route-id="@reservation.Screening.Movie.Id">@reservation.Screening.Movie.Title</a></td>
+                    <td><a asp-controller="Rooms" asp-action="Details" asp-route-id="@reservation.Screening.Room.Id">@reservation.Screening.Room.Name</a></td>
+                    <td>@reservation.NumOfSeats</td>
+                    <td>@reservation.Screening.StartsAt.ToString("dd/MM/yyyy, HH:mm")</td>
+                    @if (isContentManager)
+                    {
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@reservation.Id">Delete</a>
+                        </td> 
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @if (isContentManager)
+    {
+        <div class="alert alert-info" role="alert">
+            No reservations found.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            You don't have any reservations yet.
+        </div>
+    }
+}
+

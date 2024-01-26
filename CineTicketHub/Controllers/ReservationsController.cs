@@ -1,29 +1,55 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using CineTicketHub.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CineTicketHub.Models;
 using CineTicketHub.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace CineTicketHub.Controllers
 {
     public class ReservationsController : Controller
     {
         private readonly CineTicketHubContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReservationsController(CineTicketHubContext context)
+        public ReservationsController(CineTicketHubContext context, 
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            var cineTicketHubContext = _context.Reservations.Include(r => r.Screening);
-            return View(await cineTicketHubContext.ToListAsync());
+            var isContentManager = User.IsInRole(UserRole.CONTENT_MANAGER.ToString());
+
+            List<Reservation> reservations;
+            if (isContentManager)
+            {
+                reservations = _context.Reservations
+                    .Include(r => r.User)
+                    .Include(r => r.Screening.Movie)
+                    .Include(r => r.Screening.Room)
+                    .ToList();
+            }
+            else
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                reservations = _context.Reservations
+                    .Where(r => r.UserId == userId)
+                    .Include(r => r.Screening.Movie)
+                    .Include(r => r.Screening.Room)
+                    .ToList();
+            }
+            
+            return View(reservations);
         }
 
         // GET: Reservations/Details/5
