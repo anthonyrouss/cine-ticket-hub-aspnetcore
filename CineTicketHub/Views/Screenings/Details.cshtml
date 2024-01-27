@@ -21,13 +21,17 @@
             @Html.DisplayNameFor(model => model.Movie)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Movie.Id)
+            <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.Movie.Id">
+                @Html.DisplayFor(model => model.Movie.Title)
+            </a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Room)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Room.Id)
+        <dd class="col-sm-10">
+            <a asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Room.Id">
+                @Html.DisplayFor(model => model.Room.Name)
+            </a>
         </dd>
     </dl>
 </div>
