@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 namespace CineTicketHub.Controllers
 {
     [Authorize(Roles = "ADMIN")]
-    public class ApplicationUsersController : Controller
+    public class ContentManagersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
-        private readonly ILogger<ApplicationUsersController> _logger;
+        private readonly ILogger<ContentManagersController> _logger;
 
-        public ApplicationUsersController(UserManager<ApplicationUser> userManager,
-            ILogger<ApplicationUsersController> logger,
+        public ContentManagersController(UserManager<ApplicationUser> userManager,
+            ILogger<ContentManagersController> logger,
             IUserStore<ApplicationUser> userStore)
         {   
             _userManager = userManager;
