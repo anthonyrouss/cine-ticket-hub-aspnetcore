@@ -58,6 +58,9 @@ namespace CineTicketHub.Controllers
 
             var reservation = await _context.Reservations
                 .Include(r => r.Screening)
+                .Include(r => r.Screening.Movie)
+                .Include(r => r.Screening.Room)
+                .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
             {
