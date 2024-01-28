@@ -1,8 +1,10 @@
+@using CineTicketHub.Enums
 @model CineTicketHub.Models.Entities.Room
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var isContentManager = User.IsInRole(UserRole.CONTENT_MANAGER.ToString());
 }
 
 <h1>Details</h1>
@@ -25,7 +27,11 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@if (isContentManager)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div> 
+}

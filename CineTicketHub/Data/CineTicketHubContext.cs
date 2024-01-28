@@ -8,7 +8,7 @@ using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace CineTicketHub.Models;
 
-public partial class CineTicketHubContext : IdentityDbContext
+public partial class CineTicketHubContext : IdentityDbContext<ApplicationUser>
 {
     public CineTicketHubContext()
     {
@@ -105,7 +105,7 @@ public partial class CineTicketHubContext : IdentityDbContext
 
             entity.HasOne(d => d.Screening).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.ScreeningId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("reservations_ibfk_1");
 
             entity.HasOne(d => d.User)
@@ -146,15 +146,15 @@ public partial class CineTicketHubContext : IdentityDbContext
 
             entity.HasOne(d => d.Movie).WithMany(p => p.Screenings)
                 .HasForeignKey(d => d.MovieId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("screenings_ibfk_1");
 
             entity.HasOne(d => d.Room).WithMany(p => p.Screenings)
                 .HasForeignKey(d => d.RoomId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("screenings_ibfk_2");
         });
-
+        
         OnModelCreatingPartial(modelBuilder);
     }
 

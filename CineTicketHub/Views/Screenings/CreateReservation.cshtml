@@ -33,15 +33,22 @@
                         <dd class="col-sm-8">@ViewBag.SeatsLeft</dd>
                     </dl>
 
-                    <form asp-controller="Screenings" asp-action="CreateReservation" method="post">
-                        <div class="form-group">
-                            <label asp-for="NumOfSeats" class="control-label">Number of Seats:</label>
-                            <input asp-for="NumOfSeats" class="form-control" placeholder="Enter number of seats"/>
-                            <span asp-validation-for="NumOfSeats" class="text-danger"></span>
-                        </div>
+                    @if (@ViewBag.SeatsLeft > 0)
+                    {
+                        <form asp-controller="Screenings" asp-action="CreateReservation" method="post">
+                            <div class="form-group">
+                                <label asp-for="NumOfSeats" class="control-label">Number of Seats:</label>
+                                <input asp-for="NumOfSeats" class="form-control" placeholder="Enter number of seats"/>
+                                <span asp-validation-for="NumOfSeats" class="text-danger"></span>
+                            </div>
 
-                        <input type="submit" value="Reserve Seats" class="btn btn-primary mt-2" />
-                    </form>
+                            <input type="submit" value="Reserve Seats" class="btn btn-primary mt-2"/>
+                        </form>
+                    }
+                    else
+                    {
+                        <input value="Sold out" class="btn btn-danger mt-2" disabled/>
+                    }
                 </div>
             </div>
         </div>

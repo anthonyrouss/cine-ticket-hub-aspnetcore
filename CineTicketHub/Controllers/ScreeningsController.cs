@@ -30,8 +30,13 @@ namespace CineTicketHub.Controllers
         [Authorize(Roles = "CONTENT_MANAGER")]
         public async Task<IActionResult> Index()
         {
-            var cineTicketHubContext = _context.Screenings.Include(s => s.Movie).Include(s => s.Room);
-            return View(await cineTicketHubContext.ToListAsync());
+            var screenings = _context.Screenings
+                .Include(s => s.Movie)
+                .Include(s => s.Room)
+                .OrderByDescending(s => s.StartsAt)
+                .ToList();
+            
+            return View(screenings);
         }
 
         // GET: Screenings/Details/5
@@ -110,8 +115,8 @@ namespace CineTicketHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", screening.MovieId);
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", screening.RoomId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", screening.MovieId);
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", screening.RoomId);
             return View(screening);
         }
 
@@ -148,8 +153,8 @@ namespace CineTicketHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", screening.MovieId);
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", screening.RoomId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", screening.MovieId);
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", screening.RoomId);
             return View(screening);
         }
 
